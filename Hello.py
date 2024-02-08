@@ -1,7 +1,7 @@
 #importing the package
 import streamlit as st
 #import cv2
-#import numpy as np
+import numpy as np
 
 #setting the pagetitle
 st.set_page_config(page_title='cartoonify')   
