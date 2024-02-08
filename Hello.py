@@ -16,5 +16,5 @@ if uploaded_file is not None:
     
     # Convert the file to an opencv image
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    #image = cv2.imdecode(file_bytes, 1)
+    image = cv2.imdecode(file_bytes, 1)
     
