@@ -1,11 +1,27 @@
 import streamlit as st
-from PIL import Image, ImageFilter
+import numpy as np
+from PIL import Image, ImageFilter, ImageOps
 
 def cartoonify_image(image, cartoon_intensity=5):
-    # Apply Gaussian blur
-    blur = image.filter(ImageFilter.GaussianBlur(cartoon_intensity))
+    # Convert image to numpy array
+    img = np.array(image)
     
-    return blur
+    # Convert to grayscale
+    gray = ImageOps.grayscale(image)
+    
+    # Apply Gaussian blur
+    blur = gray.filter(ImageFilter.GaussianBlur(cartoon_intensity))
+    
+    # Apply edge enhancement
+    edge_enhanced = ImageOps.equalize(blur, mask=None)
+    
+    # Invert colors
+    inverted = ImageOps.invert(edge_enhanced)
+    
+    # Convert back to RGB
+    cartoon = inverted.convert('RGB')
+    
+    return cartoon
 
 # Streamlit code
 st.title('Cartoonify Your Image')
