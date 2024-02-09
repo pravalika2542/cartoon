@@ -1,21 +1,37 @@
-
-#importing the package
 import streamlit as st
-#import cv2
-#import numpy as np
+from PIL import Image
+import numpy as np
 
-#setting the pagetitle
-st.set_page_config(page_title='cartoonify')   
-#setting the heading of the page
-st.title("Cartoon effect on image")   
+def cartoonify_image(image, cartoon_intensity=5):
+    # Convert image to numpy array
+    img = np.array(image)
+    
+    # Convert to grayscale
+    gray = np.array(image.convert('L'))
+    
+    # Apply Gaussian blur
+    blur = cv2.GaussianBlur(gray, (cartoon_intensity, cartoon_intensity), 0)
+    
+    # Convert back to PIL image
+    cartoon = Image.fromarray(blur)
+    
+    return cartoon
 
-#uploading an user input(img)
-uploaded_file = st.file_uploader("Choose an image...", type=["png"])
-#displaying the uploaded image
+# Streamlit code
+st.title('Cartoonify Your Image')
+st.write('Upload your image and see the magic!')
+
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+
 if uploaded_file is not None:
-    st.image(uploaded_file, caption='Uploaded Image.', use_column_width=True)
+    image = Image.open(uploaded_file)
     
-    # Convert the file to an opencv image
-    #file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    #image = cv2.imdecode(file_bytes, 1)
+    st.subheader('Original Image')
+    st.image(image, use_column_width=True)
     
+    cartoon_intensity = st.slider('Select the intensity of cartoonify (Higher value for more intense)', min_value=1, max_value=15, value=5)
+    
+    cartoon_img = cartoonify_image(image, cartoon_intensity)
+    
+    st.subheader('Cartoonified Image')
+    st.image(cartoon_img, use_column_width=True)
